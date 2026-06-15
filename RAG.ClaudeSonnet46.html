@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Programme Status — MRG Omnichannel Commerce — Claude Sonnet 4.6</title>
+  <style>
+    /* === CodeMie Design System — inlined for portability === */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    /* tokens.css */
+    :root {
+      --font-sans: 'Inter', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', 'GeistMono', 'Fira Code', 'Courier New', monospace;
+      --text-xs-1: 0.625rem; --text-xs: 0.75rem; --text-sm-1: 0.813rem; --text-sm: 0.875rem;
+      --text-base: 1rem; --text-h1: 2rem; --text-h2: 1.5rem; --text-h3: 1rem; --text-h4: 0.875rem; --text-h5: 0.75rem;
+      --lh-h1: 2rem; --lh-h2: 1.5rem; --lh-h3: 1.3125rem; --lh-h4: 1.125rem; --lh-h5: 1rem;
+      --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-xl: 12px; --radius-2xl: 16px; --radius-full: 9999px;
+      --space-0-5: 0.125rem; --space-1: 0.25rem; --space-1-5: 0.375rem; --space-2: 0.5rem; --space-2-5: 0.625rem;
+      --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.4); --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.5),0 2px 4px -2px rgba(0,0,0,0.3); --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.6),0 4px 6px -4px rgba(0,0,0,0.4);
+      --transition-fast: 120ms ease; --transition-base: 200ms ease; --transition-slow: 300ms ease;
+      --navbar-width: 72px; --sidebar-width: 308px; --layout-header-height: 56px; --card-height: 158px;
+      --z-dropdown: 30; --z-sticky: 40; --z-modal: 50; --z-toast: 60;
+    }
+    :root, :root.dark {
+      --color-bg-page: #1A1A1A; --color-bg-sidebar: #151515; --color-bg-card: #151515; --color-bg-nav: #000000;
+      --color-bg-elevated: #2E2E2E; --color-bg-secondary: #212224; --color-bg-tertiary: #2E3033; --color-bg-quaternary: #333436;
+      --color-bg-hover: #212224; --color-bg-hover-strong: #333436; --color-bg-input: #1A1A1A; --color-bg-input-prefix: #333436;
+      --color-bg-btn-primary: #20222E; --color-bg-btn-primary-h: #262941; --color-bg-pagination-active: #212224;
+      --color-text-primary: #FFFFFF; --color-text-secondary: #F2F0EF; --color-text-tertiary: #CCCCCC;
+      --color-text-muted: #BBBBBB; --color-text-placeholder: #CCCCCC; --color-text-link: #F2F0EF;
+      --color-text-link-hover: #F2F0EF; --color-text-inverse: #FFFFFF; --color-text-heading: #BBBBBB; --color-text-nav: #CCCCCC;
+      --color-border-primary: #333436; --color-border-secondary: #47484A; --color-border-structural: #333436;
+      --color-border-subtle: #4C4C4C; --color-border-accent: #FFFFFF; --color-border-focus: #FFFFFF;
+      --color-border-error: #F9303C; --color-border-panel: #333436; --color-border-btn-secondary: #333436; --color-border-btn-secondary-h: transparent;
+      --color-icon-primary: #FFFFFF; --color-icon-secondary: #CCCCCC; --color-icon-tertiary: #999999; --color-icon-error: #F9303C;
+      --color-success: #259F4C; --color-success-bg: #1B271F; --color-success-border: #259F4C; --color-success-text: #259F4C;
+      --color-error: #F9303C; --color-error-bg: #262121; --color-error-border: #FE3B4C; --color-error-text: #FE3B4C;
+      --color-warning: #F5A534; --color-warning-bg: #492B00; --color-warning-border: #663B00; --color-warning-text: #F5A534;
+      --color-info: #2297F6; --color-info-bg: #002442; --color-info-border: #003A69; --color-info-text: #2297F6;
+      --color-purple: #C084FC; --color-purple-bg: #2D1B3D; --color-purple-border: #2D1B3D; --color-purple-text: #F3E8FF;
+      --color-cyan: #06B6D4; --color-cyan-bg: #003942; --color-cyan-border: #005866;
+      --status-not-started-text: #A0A0A0; --status-not-started-bg: #333333; --status-not-started-border: #4C4C4C;
+      --status-in-progress-text: #2297F6; --status-in-progress-bg: #002442; --status-in-progress-border: #003A69;
+      --status-pending-text: #06B6D4; --status-pending-bg: #003942; --status-pending-border: #005866;
+      --status-success-text: #259F4C; --status-success-bg: #1B271F; --status-success-border: #259F4C;
+      --status-error-text: #FE3B4C; --status-error-bg: #262121; --status-error-border: #FE3B4C;
+      --status-warning-text: #F5A534; --status-warning-bg: #492B00; --status-warning-border: #663B00;
+      --status-advanced-text: #C084FC; --status-advanced-bg: #2D1B3D; --status-advanced-border: #2D1B3D;
+      --gradient-primary-btn: linear-gradient(90deg,#672D92,#547CCC);
+      --gradient-brand: linear-gradient(152deg,#0078C2,#0047FF,#8453D2);
+      --gradient-magical: linear-gradient(90deg,#672D92,#5677C8);
+    }
+
+    /* base.css */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-size: var(--text-sm); line-height: 1.5; color: var(--color-text-primary); background-color: var(--color-bg-page); -webkit-font-smoothing: antialiased; }
+    a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-fast); }
+    a:hover { color: var(--color-text-link-hover); text-decoration: underline; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--color-border-subtle); border-radius: var(--radius-full); }
+    ::selection { background: rgba(34,151,246,0.3); color: var(--color-text-primary); }
+    :focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+    img, svg, video { display: block; max-width: 100%; }
+    ul, ol { list-style: none; }
+    code, pre, kbd, samp { font-family: var(--font-mono); }
+    code { font-size: 0.875em; background: var(--color-bg-quaternary); color: var(--color-text-secondary); padding: 0.1em 0.4em; border-radius: var(--radius-sm); border: 1px solid var(--color-border-primary); }
+    hr, .divider { border: none; border-top: 1px solid var(--color-border-structural); margin: var(--space-4) 0; }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 var(--space-4); }
+
+    /* typography.css */
+    h1,.h1 { font-size: var(--text-h1); line-height: var(--lh-h1); font-weight: 700; color: var(--color-text-primary); letter-spacing: -0.02em; }
+    h2,.h2 { font-size: var(--text-h2); line-height: var(--lh-h2); font-weight: 600; color: var(--color-text-primary); }
+    h3,.h3 { font-size: var(--text-h3); line-height: var(--lh-h3); font-weight: 600; color: var(--color-text-primary); }
+    h4,.h4 { font-size: var(--text-h4); line-height: var(--lh-h4); font-weight: 600; color: var(--color-text-primary); }
+    h5,.h5 { font-size: var(--text-h5); line-height: var(--lh-h5); font-weight: 600; color: var(--color-text-primary); }
+    h6,.h6 { font-size: var(--text-xs); line-height: 1.4; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .section-label { font-size: var(--text-xs); font-weight: 600; color: var(--color-text-heading); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-2); }
+    .text-muted { color: var(--color-text-muted); }
+    .text-xs { font-size: var(--text-xs); }
+    .text-sm { font-size: var(--text-sm); }
+    p { color: var(--color-text-secondary); font-size: var(--text-sm); line-height: 1.6; }
+    p + p { margin-top: var(--space-3); }
+
+    /* components.css — card */
+    .card { display: flex; flex-direction: column; background-color: var(--color-bg-card); border: 1px solid var(--color-border-structural); border-radius: var(--radius-xl); overflow: hidden; transition: border-color var(--transition-base), box-shadow var(--transition-base); }
+    .card:hover { border-color: var(--color-border-secondary); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-4); border-bottom: 1px solid var(--color-border-structural); }
+    .card-body { flex: 1; padding: var(--space-4); overflow: hidden; }
+    .card-title { font-size: var(--text-base); font-weight: 600; color: var(--color-text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .card-subtitle { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+    /* badge */
+    .badge { display: inline-flex; align-items: center; gap: var(--space-1-5); padding: 0 var(--space-2); height: 17px; line-height: 17px; border-radius: var(--radius-full); border: 1px solid; font-size: var(--text-xs-1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; user-select: none; flex-shrink: 0; }
+    .badge-dot { width: 7px; height: 7px; border-radius: var(--radius-full); flex-shrink: 0; display: inline-block; }
+    .badge-success { background-color: var(--status-success-bg); color: var(--status-success-text); border-color: var(--status-success-border); }
+    .badge-success .badge-dot { background-color: var(--status-success-text); }
+    .badge-warning { background-color: var(--status-warning-bg); color: var(--status-warning-text); border-color: var(--status-warning-border); }
+    .badge-warning .badge-dot { background-color: var(--status-warning-text); }
+    .badge-error { background-color: var(--status-error-bg); color: var(--status-error-text); border-color: var(--status-error-border); }
+    .badge-error .badge-dot { background-color: var(--status-error-text); }
+
+    /* alert */
+    .alert { display: flex; align-items: flex-start; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); border: 1px solid; font-size: var(--text-xs); line-height: 1.5; }
+    .alert-warning { background-color: var(--color-warning-bg); border-color: var(--color-warning-border); color: var(--color-warning-text); }
+
+    /* stat-card */
+    .stat-card { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-3) var(--space-4); background-color: var(--color-bg-card); border: 1px solid var(--color-border-structural); border-radius: var(--radius-xl); min-width: 0; }
+    .stat-card-label { font-size: var(--text-xs-1); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted); }
+    .stat-card-value { font-size: var(--text-h2); font-weight: 700; line-height: 1.2; color: var(--color-text-primary); }
+    .stat-card-desc { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--space-3); }
+
+    /* dl-grid */
+    .dl-grid { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-2) var(--space-4); font-size: var(--text-sm); }
+    .dl-grid dt { color: var(--color-text-muted); font-weight: 500; white-space: nowrap; }
+    .dl-grid dd { color: var(--color-text-primary); }
+
+    /* layout.css — table */
+    .table-wrapper { width: 100%; overflow-x: auto; }
+    table.table, .table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--text-xs); line-height: 1.3; }
+    .table thead tr th { text-align: left; padding: var(--space-2-5) var(--space-4); font-weight: 600; color: var(--color-text-primary); background-color: var(--color-bg-quaternary); border-top: 1px solid var(--color-border-structural); border-bottom: 1px solid var(--color-border-structural); white-space: nowrap; }
+    .table thead tr th:first-child { border-left: 1px solid var(--color-border-structural); border-radius: var(--radius-lg) 0 0 0; }
+    .table thead tr th:last-child { border-right: 1px solid var(--color-border-structural); border-radius: 0 var(--radius-lg) 0 0; }
+    .table tbody tr td { padding: var(--space-3) var(--space-4); color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border-structural); vertical-align: middle; }
+    .table tbody tr:hover td { background-color: var(--color-bg-hover); }
+    .table tbody tr:last-child td { border-bottom: none; }
+
+    /* utilities.css */
+    .flex { display: flex; } .flex-col { flex-direction: column; } .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; } .gap-2 { gap: var(--space-2); } .gap-3 { gap: var(--space-3); }
+    .mt-2 { margin-top: var(--space-2); } .mt-4 { margin-top: var(--space-4); } .mt-6 { margin-top: var(--space-6); }
+    .mb-4 { margin-bottom: var(--space-4); } .p-6 { padding: var(--space-6); }
+    .w-full { width: 100%; } .border { border: 1px solid var(--color-border-structural); }
+
+    /* === Page-specific styles === */
+    .page-header { margin-bottom: var(--space-6); }
+    .page-header h1 { font-size: 1.5rem; margin-bottom: var(--space-1); }
+    .meta-row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-2); }
+    .meta-item { font-size: var(--text-xs); color: var(--color-text-muted); }
+    .meta-item strong { color: var(--color-text-secondary); }
+    .model-tag { display: inline-flex; align-items: center; gap: var(--space-1); padding: 2px var(--space-2); background: var(--gradient-primary-btn); border-radius: var(--radius-full); font-size: var(--text-xs-1); font-weight: 700; color: #fff; letter-spacing: 0.04em; text-transform: uppercase; }
+    .section-heading { font-size: var(--text-xs); font-weight: 600; color: var(--color-text-heading); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-3); margin-top: var(--space-6); }
+    .decision-item { display: flex; gap: var(--space-3); padding: var(--space-3); background-color: var(--color-bg-secondary); border: 1px solid var(--color-border-structural); border-radius: var(--radius-lg); margin-bottom: var(--space-2); }
+    .decision-num { font-size: var(--text-xs); font-weight: 700; color: var(--color-warning-text); background: var(--color-warning-bg); border: 1px solid var(--color-warning-border); border-radius: var(--radius-full); width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .decision-text { font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.5; }
+    .next-week-list { list-style: none; padding: 0; }
+    .next-week-list li { display: flex; align-items: flex-start; gap: var(--space-2); padding: var(--space-2) 0; border-bottom: 1px solid var(--color-border-structural); font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .next-week-list li:last-child { border-bottom: none; }
+    .bullet { width: 6px; height: 6px; border-radius: var(--radius-full); background-color: var(--color-info); margin-top: 6px; flex-shrink: 0; }
+    .overall-status-banner { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); background-color: var(--color-warning-bg); border: 1px solid var(--color-warning-border); border-radius: var(--radius-lg); margin-bottom: var(--space-6); }
+    .overall-status-label { font-size: var(--text-xs); font-weight: 700; color: var(--color-warning-text); text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+    .overall-status-text { font-size: var(--text-sm); color: var(--color-text-secondary); }
+  </style>
+</head>
+<body class="p-6">
+  <div class="container">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="flex items-center justify-between">
+        <h1>Weekly Programme Status</h1>
+        <span class="model-tag">Claude Sonnet 4.6</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-item"><strong>Programme:</strong> MRG Omnichannel Commerce</span>
+        <span class="meta-item"><strong>Date:</strong> 2026-06-15</span>
+        <span class="meta-item"><strong>Reported by:</strong> [NAME]</span>
+      </div>
+    </div>
+
+    <!-- Overall status banner -->
+    <div class="overall-status-banner">
+      <span class="overall-status-label">🟡 Amber</span>
+      <span class="overall-status-text">Identity integration at risk; all other workstreams on track.</span>
+    </div>
+
+    <!-- Workstream status -->
+    <div class="section-heading">Workstream Status</div>
+    <div class="card">
+      <div class="card-body" style="padding: 0;">
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Workstream</th>
+                <th>Status</th>
+                <th>This Week</th>
+                <th>Next Step</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Unified Identity</strong></td>
+                <td><span class="badge badge-warning"><span class="badge-dot"></span>Amber</span></td>
+                <td>Legal sign-off on consent flow pending</td>
+                <td>Close Auth0 approval with privacy team</td>
+              </tr>
+              <tr>
+                <td><strong>Cart &amp; Checkout</strong></td>
+                <td><span class="badge badge-success"><span class="badge-dot"></span>Green</span></td>
+                <td>API contracts signed across all three partners</td>
+                <td>Begin build sprint</td>
+              </tr>
+              <tr>
+                <td><strong>POS Continuity</strong></td>
+                <td><span class="badge badge-success"><span class="badge-dot"></span>Green</span></td>
+                <td>Confirmed: no POS changes in Phase 1</td>
+                <td>Monitor through Phase 2 planning</td>
+              </tr>
+              <tr>
+                <td><strong>Regional Compliance</strong></td>
+                <td><span class="badge badge-warning"><span class="badge-dot"></span>Amber</span></td>
+                <td>Italian payment requirements unresolved</td>
+                <td>Assign owner before sprint planning</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Risks & blockers -->
+    <div class="section-heading">Risks &amp; Blockers</div>
+    <div class="card">
+      <div class="card-body" style="padding: 0;">
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Risk</th>
+                <th>Impact</th>
+                <th>Owner</th>
+                <th>Mitigation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Auth0 delay — identity general availability slips 2 weeks</td>
+                <td><span class="badge badge-error"><span class="badge-dot"></span>High</span></td>
+                <td>Privacy &amp; Legal</td>
+                <td>Escalate sign-off; parallel-path config work</td>
+              </tr>
+              <tr>
+                <td>Italian payment compliance gap — no workstream owner</td>
+                <td><span class="badge badge-error"><span class="badge-dot"></span>High</span></td>
+                <td>TBD</td>
+                <td>Eva to assign: SI or MRG internal</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decisions needed -->
+    <div class="section-heading">Decisions Needed from Eva Müller</div>
+    <div class="decision-item">
+      <div class="decision-num">1</div>
+      <div class="decision-text">
+        Italian payment compliance (PSD2/SCA) has no workstream owner. Recommend assigning to SI partner given regulatory complexity. <strong>Deadline: 3 days</strong> — before next sprint planning.
+      </div>
+    </div>
+
+    <!-- Next week -->
+    <div class="section-heading">Next Week</div>
+    <div class="card">
+      <div class="card-body">
+        <ul class="next-week-list">
+          <li><span class="bullet"></span>Drive Auth0 consent-flow sign-off with legal</li>
+          <li><span class="bullet"></span>Confirm Italian payment owner following Eva's decision</li>
+          <li><span class="bullet"></span>Mid-point milestone demo to MRG product team</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top: var(--space-8); padding-top: var(--space-4); border-top: 1px solid var(--color-border-structural); display: flex; justify-content: space-between; align-items: center;">
+      <span class="text-xs text-muted">Generated by Claude Sonnet 4.6 · Kata 1 — Model Selection Note · Meridian Retail Group (Reference Case A)</span>
+      <span class="text-xs text-muted">2026-06-15</span>
+    </div>
+
+  </div>
+</body>
+</html>

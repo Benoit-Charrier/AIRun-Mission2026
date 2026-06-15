@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAG.GPT54</title>
+  <style>
+    :root {
+      --bg: #f6f7f4;
+      --panel: #ffffff;
+      --text: #1f2933;
+      --muted: #52606d;
+      --border: #d9e2ec;
+      --accent: #1f6feb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 "Segoe UI", Calibri, Arial, sans-serif;
+    }
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+    h1, h2 {
+      margin: 0 0 16px;
+      line-height: 1.2;
+    }
+    h1 {
+      font-size: 28px;
+    }
+    h2 {
+      margin-top: 28px;
+      font-size: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .meta {
+      margin: 0 0 16px;
+      color: var(--muted);
+    }
+    .status {
+      margin: 0;
+      font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f0f4f8;
+      font-weight: 600;
+    }
+    ol, ul {
+      margin: 12px 0 0 22px;
+      padding: 0;
+    }
+    li {
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>Weekly Programme Status — 2026-06-15</h1>
+    <p class="meta"><strong>Programme:</strong> MRG Omnichannel Commerce<br>
+    <strong>Reported by:</strong> TBD</p>
+    <p class="status"><strong>Overall status:</strong> 🟡 Phase 1 remains on schedule, but identity sign-off risk could delay release.</p>
+
+    <h2>Workstream status</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Workstream</th>
+          <th>Status</th>
+          <th>This week</th>
+          <th>Next step</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Unified Identity</td>
+          <td>🟡</td>
+          <td>Privacy approval blocking identity setup</td>
+          <td>Secure legal sign-off</td>
+        </tr>
+        <tr>
+          <td>Cart &amp; Checkout</td>
+          <td>🟢</td>
+          <td>Build remains on track</td>
+          <td>Continue planned build</td>
+        </tr>
+        <tr>
+          <td>POS Continuity</td>
+          <td>🟢</td>
+          <td>Phase 1 avoids store till changes</td>
+          <td>Hold current scope</td>
+        </tr>
+        <tr>
+          <td>Regional Compliance</td>
+          <td>🟡</td>
+          <td>Italy payment requirement unresolved</td>
+          <td>Assign accountable owner</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Risks &amp; blockers</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Risk</th>
+          <th>Impact</th>
+          <th>Owner</th>
+          <th>Mitigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Identity privacy sign-off delay</td>
+          <td>High</td>
+          <td>Asha Sundaram privacy team</td>
+          <td>Drive legal approval next week</td>
+        </tr>
+        <tr>
+          <td>⚠️ Board-relevant Italy payment compliance gap</td>
+          <td>High</td>
+          <td>TBD</td>
+          <td>Eva assigns owner in 3 days</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Decisions needed from Eva Müller</h2>
+    <ol>
+      <li>Assign ownership of the Italy payment compliance gap before next sprint planning in 3 days. Recommendation: name a single accountable owner now, whether SI-led or MRG internal.</li>
+    </ol>
+
+    <h2>Next week</h2>
+    <ul>
+      <li>Drive identity sign-off with legal</li>
+      <li>Close Italy payment owner</li>
+      <li>Run Phase 1 mid-point demo</li>
+    </ul>
+  </main>
+</body>
+</html>
