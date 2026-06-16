@@ -7,7 +7,8 @@
 **Project:** FDE Program — Week 2 domain orientation prior
 **Model:** GPT-5.4 via GitHub Copilot Chat
 **DIAL location:** My Files/AIRun-Mission2026/prompt-template-domain-research.md
-**Committed location:** c:\Users\Benoit_Charrier\AIRun-Mission2026\Output\prompt-domain-research.md
+**Committed location:** https://github.com/Benoit-Charrier/AIRun-Mission2026/blob/94ca45a9de2f3eef33e71932594283ca274d71d2/prompt-template-domain-research.md
+c:\Users\Benoit_Charrier\AIRun-Mission2026\Output\prompt-domain-research.md
 
 ---
 
@@ -19,11 +20,11 @@ This prompt produces a budgeted pre-scenario domain orientation brief for an FDE
 
 ## Variable Placeholders
 
-| Placeholder            | Description                                                                                       | Example value                           |
-| ---------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `{{domain}}`           | The business domain to research before reading the scenario in detail.                            | vendor contract review                  |
-| `{{process_area}}`     | Optional narrower slice of the domain when the assignment is more specific than the domain label. | pre-signature supplier agreement review |
-| `{{output_file_path}}` | Where the generated artifact should be saved in the working repository.                           | domain_research.md                      |
+| Placeholder            | Description                                                                                       | Example value                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `{{domain}}`           | The business domain to research before reading the scenario in detail.                            | omnichannel retail commerce                                                        |
+| `{{process_area}}`     | Optional narrower slice of the domain when the assignment is more specific than the domain label. | unified customer identity, cart, and checkout across web, mobile, and in-store POS |
+| `{{output_file_path}}` | Where the generated artifact should be saved in the working repository.                           | domain_research.md                                                                 |
 
 ---
 
@@ -185,9 +186,9 @@ Do not produce these failure modes:
 ## Test Run (Author)
 
 **Input values used:**
-- `{{domain}}` = vendor contract review
-- `{{process_area}}` = pre-signature supplier agreement review
-- `{{output_file_path}}` = Deliverables/D0A_domain_research.md
+- `{{domain}}` = omnichannel retail commerce
+- `{{process_area}}` = unified customer identity, cart, and checkout across web, mobile, and in-store POS
+- `{{output_file_path}}` = domain_research.md
 
 **Output quality:** Usable as-is for a teammate-run domain orientation prompt; revised once to make the section structure and failure constraints explicit.
 
