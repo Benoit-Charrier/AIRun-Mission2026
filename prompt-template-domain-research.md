@@ -6,7 +6,7 @@
 **Author:** Benoit Charrier — DM/PM
 **Project:** FDE Program — Week 2 domain orientation prior
 **Model:** GPT-5.4 via GitHub Copilot Chat
-**DIAL location:** Pending upload to DIAL
+**DIAL location:** My Files/AIRun-Mission2026/prompt-template-domain-research.md
 **Committed location:** c:\Users\Benoit_Charrier\AIRun-Mission2026\Output\prompt-domain-research.md
 
 ---
