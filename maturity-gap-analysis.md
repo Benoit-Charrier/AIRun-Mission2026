@@ -3,7 +3,7 @@
 **Date:** 2026-06-17
 **Author:** Benoit Charrier — DM/PM
 **Project:** Meridian Retail Group — Omnichannel Commerce Platform (Reference Case A)
-**Committed location:** [Repo path — update on commit]
+**Committed location:** https://github.com/Benoit-Charrier/AIRun-Mission2026/blob/b6fcf932ee07e40ad052649fbb44d28cbf5c038d/maturity-gap-analysis.md
 
 ---
 

@@ -196,26 +196,34 @@ Do not produce these failure modes:
 
 ## Peer Review
 
-**Reviewer:** Pending teammate review
-**Date reviewed:** Pending
-**Model used by reviewer:** Pending
+**Reviewer:** Dmytro Polkovnykov — Solution Architect **Date reviewed:** 2026-06-18 **Model used by reviewer:** Claude Sonnet 4.6 (via Claude Code)
 
 **Reviewer input values used:**
-- `{{domain}}` = Pending
-- `{{process_area}}` = Pending
 
-| Review question | Reviewer answer |
+- `{{domain}}` = Healthcare
+- `{{process_area}}` = US/North America, common software providers
+
+|Review question|Reviewer answer|
 |---|---|
-| Could you run the template without asking the author anything? | Pending |
-| Was the output format what you expected? | Pending |
-| Would you use this template on your own work? | Pending |
-| One concrete improvement suggestion | Pending |
+|Could you run the template without asking the author anything?|Yes — the three placeholders are clearly defined with example values, the quick-run instruction is unambiguous, and the output structure is self-contained enough that no author clarification was needed.|
+|Was the output format what you expected?|Mostly yes. All required sections (0, 0b, 1a, 1b, 1c, 2, 3a, 3b, 4, 5, 6) were present with correct formats — tables, numbered lists, and blockquotes used exactly as specified. The acceptance rules were met: 4 cognitive hotspots, 3 gaps, 11 hypothesis questions each with a named hypothesis, 6 assumption log entries including all numeric estimates. **One structural failure:** the output significantly exceeds the 2-3 page length constraint — it runs closer to 6-7 pages. The constraint is stated but not enforced by the prompt mechanics.|
+|Would you use this template on your own work?|Yes, as-is for architecture engagements. The ATX dimension table and hypothesis question format are directly transferable to any discovery preparation task, not just consulting/FDE roles. The assumption log in particular is the kind of discipline that is easy to skip and this template makes it the default.|
+|One concrete improvement suggestion|Add per-section word budgets (e.g. "≤60 words", "≤3 rows") to mechanically enforce the 2-3 page cap. The current length constraint is a global instruction that capable models routinely override when the domain is rich. A secondary issue: the `{{process_area}}` placeholder description says "narrower slice of the domain" but accepts geographic or ecosystem qualifiers (as in this run) without guidance on how to handle them — one sentence clarifying that non-process qualifiers should be treated as context, not a workflow sub-scope, would prevent ambiguous runs.|
 
+**Issues found during review run:**
+
+1. **Length overrun (blocker-class for the stated constraint).** The output was ~6-7 pages against a 2-3 page cap. The failure-modes list says "A document longer than 3 pages" is prohibited, but the prompt body gives the model no per-section budget to enforce it. Suggested fix: add explicit word limits per section (e.g., §0 ≤ 3 bullets, §1a ≤ 80 words, §5 ≤ 15 words per HQ entry).
+    
+2. **`{{process_area}}` ambiguity.** "US/North America, common software providers" is a geographic and ecosystem qualifier, not a workflow sub-scope. The model handled it gracefully by incorporating it as US-market context, but the placeholder definition does not cover this case. A reviewer using a true process area (e.g., "pre-signature supplier agreement review") would get a structurally different output. The placeholder description should distinguish workflow sub-scope from contextual qualifiers.
+    
+3. **Section 0b placement vs. generation order.** The instruction says "Generate this after the full document is written" but places it at position 0b near the top. This is by design, but some models generate it in-place before the full document exists, producing broken or missing anchors. A clarifying note ("write last, place here") would make the instruction unambiguous.
+    
+4. **No confidence threshold defined for assumption log.** The format specifies `Confidence: low / medium / high` but gives no guidance on what each level means. In this run, four of six assumptions were rated "medium" — a sign the scale is being applied intuitively. Defining the scale (e.g., "high = verifiable from public sources, low = purely domain-typical prior") would make assumption logs comparable across runs and reviewers.
 ---
 
 ## Revision History
 
-| Version | Date | Change | Author |
-|---|---|---|---|
-| 1.0 | 2026-06-16 | Initial prompt-template draft created from Week 2 domain research task prompt | Benoit Charrier |
-| 1.1 | Pending | Post-review update | Benoit Charrier |
+| Version | Date       | Change                                                                        | Author          |
+| ------- | ---------- | ----------------------------------------------------------------------------- | --------------- |
+| 1.0     | 2026-06-16 | Initial prompt-template draft created from Week 2 domain research task prompt | Benoit Charrier |
+| 1.1     | 2026-06-18 | Post-review update                                                            | Benoit Charrier |
