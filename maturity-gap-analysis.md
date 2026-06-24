@@ -3,7 +3,7 @@
 **Date:** 2026-06-17
 **Author:** Benoit Charrier — DM/PM
 **Project:** Meridian Retail Group — Omnichannel Commerce Platform (Reference Case A)
-**Committed location:** https://github.com/Benoit-Charrier/AIRun-Mission2026/blob/b6fcf932ee07e40ad052649fbb44d28cbf5c038d/maturity-gap-analysis.md
+**Committed location:** [Repo path — update on commit]
 
 ---
 
@@ -28,7 +28,7 @@
 **Dimension:** AI Capabilities
 **Current level:** L1
 **Why this gap is most damaging:** Without AI-assisted delivery, knowledge transfer between three SI partners and a junior MRG internal team relies entirely on manual documentation, creating a handover risk the 18-month timeline cannot absorb.
-**Root cause:** The program was scoped for platform consolidation, not AI-assisted delivery.
+**Root cause:** There is no AI tooling mandate or delivery standard at the program level, so teams default to non-AI workflows.
 
 ---
 
@@ -67,16 +67,25 @@
 
 ## Peer Review
 
-**Reviewer:** [Name — Role]
-**Date reviewed:** YYYY-MM-DD
+**Reviewer:** Dmytro Polkovnykov — Solution Architect
+**Date reviewed:** 2026-06-19
+**Model used by reviewer:** Claude Sonnet 4.6 (via Claude Code)
 
 | Review question | Reviewer answer |
 |---|---|
-| Is the evidence for each dimension specific and observable — not aspirational? | [One sentence] |
-| Which score do you challenge, and why? | [At least one — dimension, proposed alternative score, reason] |
-| Is each root cause a structural/behavioural cause — not a symptom? | Yes / No — [one sentence] |
-| Are the success metrics measurable without asking the author? | Yes / No — [one sentence] |
-| Would you sign off on this plan as a teammate? | Yes / No — [one sentence] |
+| Is the evidence for each dimension specific and observable — not aspirational? | Partially — Performance Tracking and AI Champions cite concrete observable facts from the case; AI Capabilities, Reusability, and DAU rely on "case description contains no mention of X," which is absence of evidence rather than an observed team behaviour, and does not satisfy the kata's standard of "specific, observable facts from your project." |
+| Which score do you challenge, and why? | **AI Capabilities — challenge the evidence, not the level.** L1 is almost certainly correct, but "no mention in a case document" can only confirm L1 in a reference case scenario, not a real project. In a live engagement, a team that simply never documented its AI usage could be scored L1 by this method when it is actually L2. The artefact should note this limitation explicitly so anyone consuming it downstream knows the evidence is case-description-derived, not field-observed. |
+| Is each root cause a structural/behavioural cause — not a symptom? | No for Gap 1 — "The program was scoped for platform consolidation, not AI-assisted delivery" is a historical scoping decision, not a structural or behavioural cause; it explains the context but not why the gap would persist if scoping were revisited. A root cause here would be: "There is no AI delivery standard or tooling mandate at the program level, so teams default to non-AI workflows by default." Gap 2's root cause ("Management has not mandated AI Champions") is structural and passes. |
+| Are the success metrics measurable without asking the author? | Yes — both metrics contain specific numbers (≥2 templates, ≥3 teammates, ≥10 outputs; 4 Champions, 4 syncs, ≥1 update/week) that a teammate can verify independently from repo history and meeting records. |
+| Would you sign off on this plan as a teammate? | Yes, with one revision required: Gap 1's root cause must be rewritten as a structural/behavioural cause before version 1.1 is committed, per the kata's explicit failure-mode rule. |
+
+**Issues found during review:**
+
+1. **Evidence methodology (affects AI Capabilities, Reusability, DAU).** Three of five evidence cells are grounded in "case description contains no mention of…" rather than observed team behaviour. This is valid for a reference-case run but must be flagged as a limitation — downstream modules consuming this baseline should know it is case-document-derived, not discovery-validated.
+
+2. **Gap 1 root cause is a historical constraint, not a structural cause.** "The program was scoped for platform consolidation" describes why AI was never introduced; it does not explain the structural mechanism that would prevent introduction now. Rewrite to name the missing structure (e.g., no AI tooling mandate, no delivery standard referencing AI practices).
+
+3. **Lena Park is not a named character in Reference Case A.** Both improvement plan steps list Lena Park as owner, but this name does not appear anywhere in the Meridian Retail case description. Either the author should name a role that exists in the case (e.g., "Program Delivery Lead") or explicitly note that Lena Park is a fictional stand-in for the purpose of the exercise. As written, a teammate reading the artefact cannot identify who owns these actions.
 
 ---
 
@@ -85,4 +94,5 @@
 | Version | Date | Change | Author |
 |---|---|---|---|
 | 1.0 | 2026-06-17 | Initial commit — scorecard complete | Benoit Charrier |
-| 1.1 | YYYY-MM-DD | Post-review update | Benoit Charrier |
+| 1.1 | 2026-06-19 | Peer review completed by Dmytro Polkovnykov | Dmytro Polkovnykov |
+| 1.2 | 2026-06-23 | Gap 1 root cause rewritten as structural cause | Benoit Charrier |
