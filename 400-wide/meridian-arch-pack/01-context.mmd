@@ -1,0 +1,30 @@
+%%{init: {'c4': {'c4ShapeMargin': 50, 'c4ShapePadding': 10}}}%%
+C4Context
+    title Meridian Phase 1 — System Context (L1)
+
+    Person(customer, "Customer", "Online shopper using web or mobile app")
+    Person(associate, "Store Associate", "Manages POS and in-store cart-bridge via loyalty QR")
+    Person(marketing, "Marketing Ops", "Creates campaigns and manages customer segments")
+
+    System(meridian, "Meridian Commerce Platform", "Unified headless platform — identity, cart, checkout, click-and-collect")
+
+    System_Ext(sap, "SAP ECC", "Inventory ground truth; batch stock-change events via CDC")
+    System_Ext(auth0, "Auth0", "External identity provider; OIDC token issuance")
+    System_Ext(stripe, "Stripe", "Payment processing; PSD2 SCA strong auth on EU card flows")
+    System_Ext(sendgrid, "SendGrid", "Transactional email — order confirmations, dispatch alerts")
+    System_Ext(crm, "Regional CRMs (×6)", "Legacy per-region customer data; async profile sync")
+    System_Ext(logistics, "Regional Logistics Providers", "Parcel carriers; inbound tracking-event webhooks")
+
+    Rel(customer, meridian, "Browses, adds to cart, checks out via", "HTTPS")
+    Rel(associate, meridian, "Looks up customer cart, rings up in-store via", "HTTPS")
+    Rel(marketing, meridian, "Creates and targets campaigns via", "HTTPS")
+
+    Rel(meridian, sap, "Reads stock-change events from", "Kafka/CDC")
+    Rel(meridian, auth0, "Authenticates and validates tokens via", "OIDC/HTTPS")
+    Rel(meridian, stripe, "Initiates payments and SCA via", "HTTPS")
+    Rel_Back(meridian, stripe, "Delivers payment-confirmed webhooks to", "HTTPS Webhook")
+    Rel(meridian, sendgrid, "Sends transactional emails via", "HTTPS")
+    Rel(meridian, crm, "Syncs customer profiles to", "REST/HTTPS")
+    Rel_Back(meridian, logistics, "Sends parcel tracking updates to", "HTTPS Webhook")
+
+    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")

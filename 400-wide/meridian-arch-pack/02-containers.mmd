@@ -1,0 +1,53 @@
+C4Container
+    title Meridian Phase 1 — Container Diagram (L2)
+
+    Person(customer, "Customer", "Web + mobile shopper")
+    Person(associate, "Store Associate", "POS and in-store cart-bridge")
+
+    System_Boundary(meridian, "Meridian Commerce Platform") {
+        Container(webapp, "Web App", "Next.js / React", "Server-rendered storefront; web checkout flow")
+        Container(mobile, "Mobile App", "React Native", "iOS and Android storefront; mobile checkout flow")
+        Container(pos, "POS Client", "React / Electron", "In-store point-of-sale; cart-bridge via loyalty QR")
+
+        Container(gateway, "Apollo GraphQL Gateway", "Node.js / Apollo Server", "Single entry point; routes queries and mutations; strangler-fig routing (/v1 legacy, /v2 platform)")
+
+        Container(identity, "Identity Service", "Node.js", "Session management; local token cache; delegates validation to Auth0")
+        Container(cart, "Cart Service", "Node.js", "Cart CRUD; line-item management; Outbox producer to Kafka")
+        Container(checkout, "Checkout Service", "Node.js", "Order creation; PSD2 SCA orchestration; Stripe payment integration")
+
+        ContainerDb(orderdb, "Order Database", "PostgreSQL on RDS", "Persistent cart and order state; Outbox table for CDC")
+        ContainerQueue(eventbus, "Order Event Bus", "Kafka on AWS MSK", "Async eventing: stock-updated, cart-updated, order-placed, payment-confirmed")
+        ContainerDb(invcache, "Inventory Read Cache", "Redis on ElastiCache", "SAP stock-event projection; per-SKU per-store availability; hydrated by Kafka consumer")
+    }
+
+    System_Ext(sap, "SAP ECC", "Inventory ground truth; batch stock-change CDC feed")
+    System_Ext(auth0, "Auth0", "External OIDC identity provider")
+    System_Ext(stripe, "Stripe", "Payment processor; EU PSD2 SCA")
+    System_Ext(sendgrid, "SendGrid", "Transactional email delivery")
+
+    Rel(customer, webapp, "Browses and purchases via", "HTTPS")
+    Rel(customer, mobile, "Browses and purchases via", "HTTPS/TLS")
+    Rel(associate, pos, "Manages POS and cart-bridge via", "HTTPS")
+
+    Rel(webapp, gateway, "Queries and mutates via", "GraphQL/HTTPS")
+    Rel(mobile, gateway, "Queries and mutates via", "GraphQL/HTTPS")
+    Rel(pos, gateway, "Queries cart and availability via", "GraphQL/HTTPS")
+
+    Rel(gateway, identity, "Validates session tokens via", "JSON/HTTPS")
+    Rel(gateway, cart, "Reads and writes cart state via", "JSON/HTTPS")
+    Rel(gateway, checkout, "Creates orders and initiates payments via", "JSON/HTTPS")
+    Rel(gateway, invcache, "Reads per-SKU availability from", "Redis protocol / TCP")
+
+    Rel(identity, auth0, "Validates and refreshes tokens via", "OIDC/HTTPS")
+
+    Rel(cart, orderdb, "Persists cart items and Outbox events to", "SQL/TCP")
+    Rel(checkout, orderdb, "Persists orders and payment state to", "SQL/TCP")
+    Rel(cart, eventbus, "Publishes cart-updated events via Outbox CDC to", "Kafka/TCP")
+    Rel(checkout, eventbus, "Publishes order-placed and payment-confirmed events to", "Kafka/TCP")
+    Rel(eventbus, invcache, "Hydrates inventory cache from SAP stock-updated events via", "Kafka consumer/TCP")
+
+    Rel(checkout, stripe, "Initiates payment intent and SCA challenge via", "HTTPS")
+    Rel(stripe, checkout, "Delivers payment-confirmed webhooks to", "HTTPS Webhook")
+
+    Rel(sap, eventbus, "Publishes stock-change events via CDC connector to", "Kafka/TCP")
+    Rel(checkout, sendgrid, "Sends order confirmation and dispatch emails via", "HTTPS")

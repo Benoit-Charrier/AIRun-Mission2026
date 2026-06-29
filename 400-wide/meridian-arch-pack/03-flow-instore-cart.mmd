@@ -1,0 +1,42 @@
+sequenceDiagram
+    title In-Store Cart-Bridge: Associate scans loyalty QR at POS
+
+    participant POS as POS Client
+    participant GW as Apollo Gateway
+    participant ID as Identity Service
+    participant CART as Cart Service
+    participant CACHE as Inventory Cache (Redis)
+    participant SAP as SAP ECC
+    participant DB as Order Database
+
+    Note over POS,SAP: Happy path p95 target: < 1500ms total (in-store cart hydration budget)
+
+    POS->>GW: POST /graphql { cartMerge(loyaltyQR: "...") } [~15ms gateway routing]
+    GW->>ID: validateToken(loyaltyQR) [~10ms local Redis session check]
+    ID-->>GW: { customerId, sessionValid: true } [~10ms]
+
+    GW->>CART: getCart(customerId) [~10ms service call]
+    CART->>DB: SELECT cart_items WHERE customer_id = ? [~15ms PostgreSQL p95]
+    DB-->>CART: [{ sku: "SKU-001", qty: 1 }, { sku: "SKU-042", qty: 2 }, { sku: "SKU-117", qty: 1 }]
+    CART-->>GW: cart { lineItems: [...3 items...] } [~10ms]
+
+    loop Per line item — 3 items, sequential (p95 volume)
+        GW->>CACHE: GET stock:{storeId}:{sku} [~2ms Redis]
+        alt Cache hit (p95: 85% of lookups)
+            CACHE-->>GW: { confidence: 0.82, freshness_min: 12, available: true } [~2ms]
+        else Cache miss (p95: 15% of lookups — triggers SAP inline fallback)
+            Note over GW,SAP: Cache miss: SAP ECC inline query — +400ms p95
+            GW->>SAP: RFC_READ_STOCK(sku, storeId) [~400ms SAP ECC round-trip]
+            SAP-->>GW: { qty: 3, last_updated: "..." } [~400ms]
+            GW->>CACHE: SET stock:{storeId}:{sku} EX 1800 [async write-back, ~2ms]
+        end
+    end
+
+    GW-->>POS: { cart: { lineItems: [...], availabilityStates: [...] } } [~20ms serialisation]
+
+    Note over POS,SAP: Happy path (all cache hits): ~82ms total
+    Note over POS,SAP: Worst case (all 3 items cache-miss): ~82ms + (3 × 400ms) = ~1282ms — within 1500ms budget
+    Note over POS,SAP: ---
+    Note over POS,SAP: BOTTLENECK: SAP ECC inline lookup at ~400ms p95 dominates when inventory cache misses.
+    Note over POS,SAP: Primary mitigation: cache warm-up on Kafka stock events (reduce miss rate to < 5%).
+    Note over POS,SAP: Secondary mitigation: degrade to "stock unknown — confirm with floor staff" on SAP timeout > 1s.

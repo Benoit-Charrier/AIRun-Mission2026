@@ -1,0 +1,33 @@
+graph TD
+    POS["POS Client"]
+
+    GW["Apollo GraphQL Gateway"]
+    ID["Identity Service"]
+    CART["Cart Service"]
+    CACHE["Inventory Cache (Redis)"]
+    DB["Order Database (PostgreSQL)"]
+    SAP["SAP ECC"]
+    AUTH0["Auth0 (external)"]
+    KAFKA["Order Event Bus (Kafka)"]
+
+    POS -->|"sync GraphQL/HTTPS"| GW
+    GW -->|"sync JSON/HTTPS"| ID
+    GW -->|"sync JSON/HTTPS"| CART
+    GW -->|"sync Redis/TCP"| CACHE
+
+    ID -->|"sync OIDC/HTTPS"| AUTH0
+
+    CART -->|"sync SQL/TCP"| DB
+    DB -.->|"async CDC → Kafka Outbox"| KAFKA
+
+    KAFKA -.->|"async AMQP consumer"| CACHE
+    SAP -.->|"async CDC stock events"| KAFKA
+
+    CACHE -->|"sync RFC inline fallback only on cache miss"| SAP
+
+    classDef sync stroke:#2563eb,stroke-width:2px
+    classDef async stroke:#9333ea,stroke-width:2px,stroke-dasharray:6 3
+    classDef external fill:#f3f4f6,stroke:#6b7280
+
+    class GW,ID,CART,CACHE,DB sync
+    class KAFKA,SAP,AUTH0 external

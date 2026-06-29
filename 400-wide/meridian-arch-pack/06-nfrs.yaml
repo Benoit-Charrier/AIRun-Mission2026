@@ -1,0 +1,103 @@
+---
+# Meridian Phase 1 — Machine-Readable NFR Budgets
+# Generated: 2026-06-26 | Kata: 4.W.7
+# Usage: CI fitness function reads this file; a build fails when a measured value breaches the target.
+
+nfrs:
+  - id: NFR-01
+    name: Cart-to-checkout p95 latency
+    family: latency
+    containers:
+      - Apollo GraphQL Gateway
+      - Cart Service
+      - Checkout Service
+    target: "p95 < 1500ms (EU, including PSD2 SCA external round-trip)"
+    target_value: 1500
+    target_unit: ms
+    target_percentile: p95
+    breach_action: "PR blocked if measured > 1800ms; alert at > 1200ms"
+    test_approach: "Synthetic checkout from each active region nightly; k6 script covers full cart-add → checkout flow including Stripe SCA sandbox"
+    justification: "PSD2 SCA round-trip (500–1500ms) dominates EU checkout latency; sub-100ms targets are physically impossible on EU card paths"
+
+  - id: NFR-02
+    name: Black Friday peak RPS
+    family: reliability
+    containers:
+      - Apollo GraphQL Gateway
+      - Cart Service
+      - Checkout Service
+    target: "8000 RPS sustained; 12000 RPS burst (10 min); error_rate < 0.1% at peak"
+    target_value_sustained_rps: 8000
+    target_value_burst_rps: 12000
+    target_error_rate_pct: 0.1
+    breach_action: "Load test failure blocks release branch merge"
+    test_approach: "k6 or Gatling load test on PR merge to release branch; replay 2024 Black Friday traffic shape"
+    justification: "Black Friday 2024 caused a 40-minute EU outage; peak load is a known recurring risk"
+
+  - id: NFR-03
+    name: Inventory cache freshness and phantom-stock rate
+    family: quality
+    containers:
+      - Inventory Read Cache (Redis)
+      - Order Event Bus (Kafka)
+      - SAP ECC CDC connector
+    target: "phantom_stock_cancellation_rate < 2%; cache_lag_p95 < 30 min"
+    target_phantom_stock_pct: 2
+    target_cache_lag_minutes_p95: 30
+    breach_action: "Weekly report; alert when 7-day rolling phantom-stock rate exceeds 2%; on-call page if cache lag > 30 min sustained > 15 min"
+    test_approach: "Daily reconciliation: Redis cache vs SAP ECC stock counts per store; phantom-stock rate from order cancellation events tagged 'item_not_found_at_pickup'"
+    justification: "~7% click-and-collect phantom-stock cancellation rate is the primary product KPI this programme is built to fix"
+
+  - id: NFR-04
+    name: Platform availability per region
+    family: reliability
+    containers:
+      - Apollo GraphQL Gateway
+      - Checkout Service
+      - Auth0 (SLA passthrough)
+    target: "99.95% per region per calendar month (≤ 22 min downtime/month, excluding planned maintenance)"
+    target_availability_pct: 99.95
+    breach_action: "SLO burn-rate alert at 99.92% (15% budget consumed in 1 hour); escalate to Tomás Reyes + Asha Sundaram"
+    test_approach: "Synthetic uptime probe from each region every 60s; SLO dashboard; quarterly availability report to programme steering committee"
+    justification: "No acceptable downtime — stores depend on the platform for POS during all trading hours"
+
+  - id: NFR-05
+    name: Cost per completed checkout transaction
+    family: cost
+    containers:
+      - All Phase 1 hot-path containers
+    target: "< $0.04 per completed checkout (excluding Stripe per-transaction fees)"
+    target_value: 0.04
+    target_currency: USD
+    breach_action: "Alert when 7-day rolling average exceeds $0.035; cost review triggered by programme director Eva Müller"
+    test_approach: "Daily AWS CUR cost-allocation report tagged by container; automated unit-cost calculation = total_infra_cost / completed_checkouts"
+    justification: "$42M / 18-month budget + 31% digital revenue share; unit economics determine commercial viability at scale"
+
+  - id: NFR-06
+    name: Identity service auth latency
+    family: latency
+    containers:
+      - Identity Service
+      - Auth0
+    target: "p95 < 250ms (token validate + session refresh); Redis cache hit rate > 90%"
+    target_value: 250
+    target_unit: ms
+    target_percentile: p95
+    cache_hit_rate_floor_pct: 90
+    breach_action: "Alert at p95 > 200ms or cache hit rate < 85%; PagerDuty on-call page if p95 > 400ms"
+    test_approach: "Synthetic auth-flow probe every 60s per region; cache hit rate dashboarded in Grafana; alert rules in CloudWatch"
+    justification: "Identity latency gates every POS transaction; 1-second auth delays per scan are unacceptable at in-store queues"
+
+  - id: NFR-07
+    name: EU PSD2 SCA completion rate and PCI PII boundary
+    family: security_and_compliance
+    containers:
+      - Checkout Service
+      - Stripe gateway integration
+      - PII scrub stage
+    target: "100% of EU card payments trigger PSD2 SCA; 0 PII fields outside PCI trust boundary"
+    target_sca_completion_pct: 100
+    target_pii_leaks: 0
+    breach_action: "CI pipeline blocked on PAN-pattern match in log output; nightly PII egress scan failure pages security on-call; QSA finding triggers P1 incident"
+    test_approach: "CI grep for PAN patterns (\\d{13,19}) in log fixtures on each deploy; nightly PII-egress scan; quarterly QSA audit for PCI-DSS Level 1 conformance"
+    justification: "PSD2 SCA and PCI-DSS Level 1 are regulatory requirements; non-compliance risks fines and card scheme de-listing"

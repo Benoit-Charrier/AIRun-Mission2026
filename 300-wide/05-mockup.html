@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — AI Availability Assistant (Lo-fi prototype)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f4f4; color: #1a1a1a; }
+  .screen { display: none; max-width: 390px; margin: 0 auto; background: #fff; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+  .nav { background: #1a1a1a; color: #fff; padding: 12px 16px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .nav .back { cursor: pointer; font-size: 18px; }
+  .product-img { background: #e8e8e8; height: 220px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px; }
+  .product-info { padding: 16px; }
+  .product-name { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .product-price { font-size: 18px; color: #1a1a1a; margin-bottom: 16px; }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #666; margin-bottom: 8px; }
+  .availability-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+  .availability-card.likely { border-left: 4px solid #f59e0b; }
+  .availability-card.available { border-left: 4px solid #10b981; }
+  .availability-card.unavailable { border-left: 4px solid #ef4444; }
+  .availability-card.unknown { border-left: 4px solid #9ca3af; }
+  .store-name { font-weight: 600; font-size: 15px; }
+  .store-meta { font-size: 12px; color: #666; margin-top: 2px; }
+  .verdict-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin-top: 6px; }
+  .verdict-badge.likely { background: #fef3c7; color: #92400e; }
+  .verdict-badge.available { background: #d1fae5; color: #065f46; }
+  .verdict-badge.unavailable { background: #fee2e2; color: #991b1b; }
+  .verdict-badge.unknown { background: #f3f4f6; color: #374151; }
+  .disclosure { font-size: 11px; color: #6b7280; margin-top: 4px; text-decoration: underline; cursor: pointer; }
+  .fallback-banner { background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+  .fallback-banner .title { font-size: 13px; font-weight: 600; color: #374151; }
+  .fallback-banner .body { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  .fallback-banner a { color: #1d4ed8; text-decoration: none; }
+  .alt-stores { margin-top: 16px; }
+  .reserve-btn { margin: 16px; padding: 14px; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; width: calc(100% - 32px); font-size: 16px; font-weight: 600; cursor: pointer; }
+  .reserve-btn:disabled { background: #d1d5db; cursor: default; }
+  .confirm-section { padding: 16px; }
+  .confirm-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+  .confirm-row:last-of-type { border-bottom: none; }
+  .confirm-label { color: #6b7280; }
+  .confirm-value { font-weight: 500; }
+  .warning-box { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 12px 0; font-size: 13px; color: #92400e; }
+  .confirm-btn { margin: 0 16px 16px; padding: 14px; background: #1a1a1a; color: #fff; border: none; border-radius: 8px; width: calc(100% - 32px); font-size: 16px; font-weight: 600; cursor: pointer; }
+  .feedback-section { padding: 24px 16px; }
+  .feedback-card { border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; text-align: center; }
+  .success-icon { font-size: 48px; margin-bottom: 12px; }
+  .feedback-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .feedback-body { font-size: 14px; color: #6b7280; margin-bottom: 20px; }
+  .feedback-actions { display: flex; gap: 8px; justify-content: center; }
+  .feedback-btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; border: 1px solid #e0e0e0; background: #fff; }
+  .feedback-btn.primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .tooltip-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; }
+  .tooltip-overlay.open { display: flex; }
+  .tooltip-sheet { background: #fff; border-radius: 16px 16px 0 0; padding: 20px; width: 100%; max-width: 390px; margin: 0 auto; }
+  .tooltip-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .tooltip-body { font-size: 14px; color: #374151; line-height: 1.5; }
+  .tooltip-close { margin-top: 16px; padding: 12px; background: #f3f4f6; border: none; border-radius: 8px; width: 100%; font-size: 14px; cursor: pointer; }
+  .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; height: 16px; border-radius: 4px; margin-bottom: 6px; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+  .screen-selector { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 390px; background: #fff; border-top: 1px solid #e0e0e0; padding: 8px; display: flex; gap: 4px; z-index: 50; }
+  .screen-selector button { flex: 1; padding: 8px 4px; font-size: 11px; border: 1px solid #e0e0e0; border-radius: 6px; background: #fff; cursor: pointer; }
+  .screen-selector button.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: Product page — confidence indicator (LIKELY state) -->
+<div class="screen active" id="screen-1">
+  <div class="nav">
+    <span>Meridian</span>
+  </div>
+  <div class="product-img">[Product image — Bosch Drill PSB 1800]</div>
+  <div class="product-info">
+    <div class="product-name">Bosch PSB 1800 LI-2 Cordless Drill</div>
+    <div class="product-price">£89.99</div>
+
+    <div class="section-label">Click &amp; Collect availability</div>
+
+    <!-- LIKELY state: confidence 0.62 -->
+    <div class="availability-card likely">
+      <div class="store-name">Meridian Canary Wharf</div>
+      <div class="store-meta">0.8 km away</div>
+      <span class="verdict-badge likely">⚠ Likely in stock</span>
+      <div class="disclosure" onclick="openTooltip()">Estimated from store data — tap for details</div>
+    </div>
+
+    <!-- AVAILABLE state: confidence 0.91 -->
+    <div class="availability-card available">
+      <div class="store-name">Meridian Stratford</div>
+      <div class="store-meta">3.2 km away</div>
+      <span class="verdict-badge available">✓ In stock</span>
+      <div class="store-meta" style="margin-top:4px;">Confirmed 8 min ago</div>
+    </div>
+
+    <!-- UNAVAILABLE state -->
+    <div class="availability-card unavailable">
+      <div class="store-name">Meridian Lewisham</div>
+      <div class="store-meta">5.1 km away</div>
+      <span class="verdict-badge unavailable">✕ Not available</span>
+    </div>
+
+    <!-- FALLBACK state for a store with stale data -->
+    <div class="fallback-banner">
+      <div class="title">⚠ Meridian Greenwich — can't confirm right now</div>
+      <div class="body">Stock data is over 30 min old. <a href="tel:+442012345678">Call the store</a> to check before travelling.</div>
+    </div>
+
+  </div>
+  <button class="reserve-btn" onclick="goTo('screen-2')">Reserve — Canary Wharf (Likely in stock)</button>
+</div>
+
+<!-- SCREEN 2: Reserve / confirm -->
+<div class="screen" id="screen-2">
+  <div class="nav">
+    <span class="back" onclick="goTo('screen-1')">←</span>
+    <span>Reserve for collection</span>
+  </div>
+  <div class="confirm-section">
+    <div class="confirm-row"><span class="confirm-label">Item</span><span class="confirm-value">Bosch PSB 1800 LI-2</span></div>
+    <div class="confirm-row"><span class="confirm-label">Store</span><span class="confirm-value">Meridian Canary Wharf</span></div>
+    <div class="confirm-row"><span class="confirm-label">Availability</span><span class="confirm-value" style="color:#92400e;">⚠ Likely in stock</span></div>
+    <div class="confirm-row"><span class="confirm-label">Data confirmed</span><span class="confirm-value">22 min ago</span></div>
+    <div class="confirm-row"><span class="confirm-label">Collection window</span><span class="confirm-value">Today, before 18:00</span></div>
+
+    <div class="warning-box">
+      <strong>This is an estimate, not a guarantee.</strong> Stock data was last synced 22 min ago. If the item is not there when you arrive, the store will offer a refund or alternative.
+    </div>
+
+    <div style="font-size:12px;color:#6b7280;padding:0 0 16px;">
+      By reserving you agree that availability is estimated, not held. No stock is reserved until you collect in person.
+    </div>
+  </div>
+  <button class="confirm-btn" onclick="goTo('screen-3')">Confirm reservation</button>
+</div>
+
+<!-- SCREEN 3: Pickup confirmation + feedback -->
+<div class="screen" id="screen-3">
+  <div class="nav">
+    <span>Meridian</span>
+  </div>
+  <div class="feedback-section">
+    <div class="feedback-card">
+      <div class="success-icon">✅</div>
+      <div class="feedback-title">Reservation confirmed</div>
+      <div class="feedback-body">Bosch PSB 1800 LI-2 at Meridian Canary Wharf<br>Collect today before 18:00 · Show this screen</div>
+
+      <div style="border-top:1px solid #f0f0f0;margin:16px 0;padding-top:16px;text-align:left;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px;">Was the availability estimate accurate?</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:12px;">We showed "Likely in stock" before you reserved. After collecting, let us know.</div>
+        <div class="feedback-actions">
+          <button class="feedback-btn primary" onclick="submitFeedback('yes')">✓ Yes, it was there</button>
+          <button class="feedback-btn" onclick="submitFeedback('no')">✕ Item wasn't there</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Disclosure tooltip -->
+<div class="tooltip-overlay" id="tooltip">
+  <div class="tooltip-sheet">
+    <div class="tooltip-title">About this estimate</div>
+    <div class="tooltip-body">
+      <p><strong>What it shows:</strong> an estimate of whether this item is likely to be on the shelf at Meridian Canary Wharf right now.</p>
+      <p style="margin-top:8px;"><strong>Based on:</strong> Meridian's inventory system (SAP), synced 22 minutes ago, combined with recent sales patterns at this store.</p>
+      <p style="margin-top:8px;"><strong>Confidence:</strong> 62% — below our 70% threshold for "In stock", so we're showing "Likely in stock" instead.</p>
+      <p style="margin-top:8px;"><strong>This is not a hold or a guarantee.</strong> No stock is reserved until you collect in person.</p>
+    </div>
+    <button class="tooltip-close" onclick="closeTooltip()">Got it</button>
+  </div>
+</div>
+
+<!-- Screen selector nav (for prototype demo) -->
+<div class="screen-selector">
+  <button id="nav-1" class="active" onclick="goTo('screen-1')">1. Product page</button>
+  <button id="nav-2" onclick="goTo('screen-2')">2. Reserve</button>
+  <button id="nav-3" onclick="goTo('screen-3')">3. Confirmation</button>
+</div>
+
+<script>
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.screen-selector button').forEach(b => b.classList.remove('active'));
+  const n = id.replace('screen-', 'nav-');
+  document.getElementById(n).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function openTooltip() {
+  document.getElementById('tooltip').classList.add('open');
+}
+function closeTooltip() {
+  document.getElementById('tooltip').classList.remove('open');
+}
+function submitFeedback(val) {
+  alert(val === 'yes'
+    ? 'Thanks! Your feedback helps improve our estimates.'
+    : 'Sorry to hear that. Your report has been logged and will help us improve accuracy at this store.');
+}
+</script>
+</body>
+</html>
