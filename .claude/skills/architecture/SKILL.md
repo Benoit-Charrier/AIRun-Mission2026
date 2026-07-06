@@ -1,6 +1,6 @@
 ---
 name: architecture-meridian
-description: Turn a Meridian Phase 1 brief or design question into a four-layer
+description: >- Turn a Meridian Phase 1 brief or design question into a four-layer
   context doc, three divergent options with a scored choice, a C4 L1+L2 pack, three
   ADRs, NFR budgets, and a fresh-session pre-mortem. Inputs: 400-wide/meridian-arch-pack/00-discovery-context.md,
   a one-line design question, the Design module's 300-wide/06-context.md handoff when

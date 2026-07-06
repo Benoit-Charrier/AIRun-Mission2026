@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m src.logsum data/sample_events.csv data/summary.csv)",
+      "Bash(python -m pytest tests/test_logsum.py -v)",
+      "Bash(ruff check *)",
+      "Bash(echo \"ruff exit: $?\")",
+      "Bash(python -m ruff check .)",
+      "Bash(python -m py_compile src/logsum.py tests/test_logsum.py conftest.py)",
+      "Bash(python -m pytest -v)",
+      "Bash(pip show *)",
+      "Bash(ruff --version)",
+      "Bash(python -m ruff --version)",
+      "Bash(python -c \"import duckdb; print\\('duckdb', duckdb.__version__\\)\")",
+      "Bash(python -c \"import pandas; print\\('pandas', pandas.__version__\\)\")",
+      "Bash(python -c \"import numpy; print\\('numpy', numpy.__version__\\)\")",
+      "Bash(pip install *)",
+      "Bash(python *)",
+      "Bash(dir C:UsersBenoit_CharrierAIRun-Mission2026Output700-widekata-workspace *)",
+      "Bash(not exist *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\" -Force | ForEach-Object { \"$\\($_.Attributes\\)`t$\\($_.Name\\)\" })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\\\\.claude\" -Recurse -Force | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\\\\\",\"\"\\) })"
+    ]
+  }
+}

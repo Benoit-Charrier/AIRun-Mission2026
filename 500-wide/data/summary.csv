@@ -1,0 +1,7 @@
+level,service,count,first_seen,last_seen
+error,checkout-service,1,2026-06-29T09:00:02,2026-06-29T09:00:02
+error,inventory-service,1,2026-06-29T09:00:07,2026-06-29T09:00:07
+info,cart-api,2,2026-06-29T09:00:03,2026-06-29T09:00:05
+info,checkout-service,2,2026-06-29T09:00:00,2026-06-29T09:00:01
+unknown,identity-service,1,2026-06-29T09:00:06,2026-06-29T09:00:06
+warn,cart-api,1,2026-06-29T09:00:04,2026-06-29T09:00:04

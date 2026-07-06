@@ -1,0 +1,10 @@
+timestamp,level,service,message
+2026-06-29T09:00:00,INFO,checkout-service,checkout started
+2026-06-29T09:00:01,INFO,checkout-service,checkout completed
+2026-06-29T09:00:02,ERROR,checkout-service,payment timeout
+2026-06-29T09:00:03,INFO,cart-api,cart loaded
+2026-06-29T09:00:04,WARN,cart-api,cart merge conflict
+2026-06-29T09:00:05,INFO,cart-api,cart saved
+2026-06-29T09:00:06,,identity-service,missing level edge case
+2026-06-29T09:00:07,ERROR,inventory-service,cache miss
+not-a-timestamp,INFO,checkout-service,malformed timestamp edge case
