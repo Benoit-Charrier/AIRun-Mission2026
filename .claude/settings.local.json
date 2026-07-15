@@ -22,7 +22,8 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\" -Force | ForEach-Object { \"$\\($_.Attributes\\)`t$\\($_.Name\\)\" })",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\\\\.claude\" -Recurse -Force | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\\\\\",\"\"\\) })"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\\\\.claude\" -Recurse -Force | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Users\\\\Benoit_Charrier\\\\AIRun-Mission2026\\\\Output\\\\\",\"\"\\) })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Benoit_Charrier\\\\.claude\\\\projects\" -Recurse -Force | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Users\\\\Benoit_Charrier\\\\.claude\\\\projects\\\\\",\"\"\\) })"
     ]
   }
 }
